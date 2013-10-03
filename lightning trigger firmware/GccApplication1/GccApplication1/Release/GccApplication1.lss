@@ -1,0 +1,199 @@
+
+GccApplication1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000130  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00000130  000001c4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000008  00800060  00800060  000001c4  2**0
+                  ALLOC
+  3 .stab         000006cc  00000000  00000000  000001c4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000097  00000000  00000000  00000890  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .comment      0000002f  00000000  00000000  00000927  2**0
+                  CONTENTS, READONLY
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	10 c0       	rjmp	.+32     	; 0x22 <__ctors_end>
+   2:	2a c0       	rjmp	.+84     	; 0x58 <__bad_interrupt>
+   4:	29 c0       	rjmp	.+82     	; 0x58 <__bad_interrupt>
+   6:	28 c0       	rjmp	.+80     	; 0x58 <__bad_interrupt>
+   8:	27 c0       	rjmp	.+78     	; 0x58 <__bad_interrupt>
+   a:	26 c0       	rjmp	.+76     	; 0x58 <__bad_interrupt>
+   c:	25 c0       	rjmp	.+74     	; 0x58 <__bad_interrupt>
+   e:	24 c0       	rjmp	.+72     	; 0x58 <__bad_interrupt>
+  10:	23 c0       	rjmp	.+70     	; 0x58 <__bad_interrupt>
+  12:	22 c0       	rjmp	.+68     	; 0x58 <__bad_interrupt>
+  14:	21 c0       	rjmp	.+66     	; 0x58 <__bad_interrupt>
+  16:	20 c0       	rjmp	.+64     	; 0x58 <__bad_interrupt>
+  18:	1f c0       	rjmp	.+62     	; 0x58 <__bad_interrupt>
+  1a:	73 c0       	rjmp	.+230    	; 0x102 <__vector_13>
+  1c:	1d c0       	rjmp	.+58     	; 0x58 <__bad_interrupt>
+  1e:	1c c0       	rjmp	.+56     	; 0x58 <__bad_interrupt>
+  20:	1b c0       	rjmp	.+54     	; 0x58 <__bad_interrupt>
+
+00000022 <__ctors_end>:
+  22:	11 24       	eor	r1, r1
+  24:	1f be       	out	0x3f, r1	; 63
+  26:	cf e5       	ldi	r28, 0x5F	; 95
+  28:	d1 e0       	ldi	r29, 0x01	; 1
+  2a:	de bf       	out	0x3e, r29	; 62
+  2c:	cd bf       	out	0x3d, r28	; 61
+
+0000002e <__do_copy_data>:
+  2e:	10 e0       	ldi	r17, 0x00	; 0
+  30:	a0 e6       	ldi	r26, 0x60	; 96
+  32:	b0 e0       	ldi	r27, 0x00	; 0
+  34:	e0 e3       	ldi	r30, 0x30	; 48
+  36:	f1 e0       	ldi	r31, 0x01	; 1
+  38:	02 c0       	rjmp	.+4      	; 0x3e <__SP_H__>
+  3a:	05 90       	lpm	r0, Z+
+  3c:	0d 92       	st	X+, r0
+  3e:	a0 36       	cpi	r26, 0x60	; 96
+  40:	b1 07       	cpc	r27, r17
+  42:	d9 f7       	brne	.-10     	; 0x3a <__do_copy_data+0xc>
+
+00000044 <__do_clear_bss>:
+  44:	20 e0       	ldi	r18, 0x00	; 0
+  46:	a0 e6       	ldi	r26, 0x60	; 96
+  48:	b0 e0       	ldi	r27, 0x00	; 0
+  4a:	01 c0       	rjmp	.+2      	; 0x4e <.do_clear_bss_start>
+
+0000004c <.do_clear_bss_loop>:
+  4c:	1d 92       	st	X+, r1
+
+0000004e <.do_clear_bss_start>:
+  4e:	a8 36       	cpi	r26, 0x68	; 104
+  50:	b2 07       	cpc	r27, r18
+  52:	e1 f7       	brne	.-8      	; 0x4c <.do_clear_bss_loop>
+  54:	4a d0       	rcall	.+148    	; 0xea <main>
+  56:	6a c0       	rjmp	.+212    	; 0x12c <_exit>
+
+00000058 <__bad_interrupt>:
+  58:	d3 cf       	rjmp	.-90     	; 0x0 <__vectors>
+
+0000005a <adc_start>:
+  5a:	36 9a       	sbi	0x06, 6	; 6
+  5c:	08 95       	ret
+
+0000005e <adc_init>:
+  5e:	3e 9a       	sbi	0x07, 6	; 7
+  60:	86 b1       	in	r24, 0x06	; 6
+  62:	8f 6a       	ori	r24, 0xAF	; 175
+  64:	86 b9       	out	0x06, r24	; 6
+  66:	08 9a       	sbi	0x01, 0	; 1
+  68:	78 94       	sei
+  6a:	f7 cf       	rjmp	.-18     	; 0x5a <adc_start>
+
+0000006c <IR_Control_Init>:
+  6c:	82 e8       	ldi	r24, 0x82	; 130
+  6e:	8f bd       	out	0x2f, r24	; 47
+  70:	89 e1       	ldi	r24, 0x19	; 25
+  72:	8e bd       	out	0x2e, r24	; 46
+  74:	82 ed       	ldi	r24, 0xD2	; 210
+  76:	90 e0       	ldi	r25, 0x00	; 0
+  78:	95 bd       	out	0x25, r25	; 37
+  7a:	84 bd       	out	0x24, r24	; 36
+  7c:	89 e6       	ldi	r24, 0x69	; 105
+  7e:	90 e0       	ldi	r25, 0x00	; 0
+  80:	9b bd       	out	0x2b, r25	; 43
+  82:	8a bd       	out	0x2a, r24	; 42
+  84:	d6 9a       	sbi	0x1a, 6	; 26
+  86:	d3 9a       	sbi	0x1a, 3	; 26
+  88:	db 9a       	sbi	0x1b, 3	; 27
+  8a:	08 95       	ret
+
+0000008c <shutter_now>:
+  8c:	db 98       	cbi	0x1b, 3	; 27
+  8e:	8f e8       	ldi	r24, 0x8F	; 143
+  90:	95 e6       	ldi	r25, 0x65	; 101
+  92:	01 97       	sbiw	r24, 0x01	; 1
+  94:	f1 f7       	brne	.-4      	; 0x92 <shutter_now+0x6>
+  96:	00 c0       	rjmp	.+0      	; 0x98 <shutter_now+0xc>
+  98:	00 00       	nop
+  9a:	db 9a       	sbi	0x1b, 3	; 27
+  9c:	ef e6       	ldi	r30, 0x6F	; 111
+  9e:	f7 e1       	ldi	r31, 0x17	; 23
+  a0:	31 97       	sbiw	r30, 0x01	; 1
+  a2:	f1 f7       	brne	.-4      	; 0xa0 <shutter_now+0x14>
+  a4:	00 c0       	rjmp	.+0      	; 0xa6 <shutter_now+0x1a>
+  a6:	00 00       	nop
+  a8:	87 e0       	ldi	r24, 0x07	; 7
+  aa:	90 e0       	ldi	r25, 0x00	; 0
+  ac:	db 98       	cbi	0x1b, 3	; 27
+  ae:	ef ec       	ldi	r30, 0xCF	; 207
+  b0:	f7 e0       	ldi	r31, 0x07	; 7
+  b2:	31 97       	sbiw	r30, 0x01	; 1
+  b4:	f1 f7       	brne	.-4      	; 0xb2 <shutter_now+0x26>
+  b6:	00 c0       	rjmp	.+0      	; 0xb8 <shutter_now+0x2c>
+  b8:	00 00       	nop
+  ba:	db 9a       	sbi	0x1b, 3	; 27
+  bc:	ef ec       	ldi	r30, 0xCF	; 207
+  be:	f7 e0       	ldi	r31, 0x07	; 7
+  c0:	31 97       	sbiw	r30, 0x01	; 1
+  c2:	f1 f7       	brne	.-4      	; 0xc0 <shutter_now+0x34>
+  c4:	00 c0       	rjmp	.+0      	; 0xc6 <shutter_now+0x3a>
+  c6:	00 00       	nop
+  c8:	01 97       	sbiw	r24, 0x01	; 1
+  ca:	81 f7       	brne	.-32     	; 0xac <shutter_now+0x20>
+  cc:	08 95       	ret
+
+000000ce <setup>:
+  ce:	ce df       	rcall	.-100    	; 0x6c <IR_Control_Init>
+  d0:	c6 df       	rcall	.-116    	; 0x5e <adc_init>
+  d2:	8b b3       	in	r24, 0x1b	; 27
+  d4:	86 60       	ori	r24, 0x06	; 6
+  d6:	8b bb       	out	0x1b, r24	; 27
+  d8:	89 b3       	in	r24, 0x19	; 25
+  da:	82 70       	andi	r24, 0x02	; 2
+  dc:	80 93 62 00 	sts	0x0062, r24
+  e0:	89 b3       	in	r24, 0x19	; 25
+  e2:	84 70       	andi	r24, 0x04	; 4
+  e4:	80 93 65 00 	sts	0x0065, r24
+  e8:	08 95       	ret
+
+000000ea <main>:
+  ea:	f1 df       	rcall	.-30     	; 0xce <setup>
+  ec:	cf df       	rcall	.-98     	; 0x8c <shutter_now>
+  ee:	2f ef       	ldi	r18, 0xFF	; 255
+  f0:	86 e4       	ldi	r24, 0x46	; 70
+  f2:	96 e8       	ldi	r25, 0x86	; 134
+  f4:	21 50       	subi	r18, 0x01	; 1
+  f6:	80 40       	sbci	r24, 0x00	; 0
+  f8:	90 40       	sbci	r25, 0x00	; 0
+  fa:	e1 f7       	brne	.-8      	; 0xf4 <main+0xa>
+  fc:	00 c0       	rjmp	.+0      	; 0xfe <main+0x14>
+  fe:	00 00       	nop
+ 100:	f5 cf       	rjmp	.-22     	; 0xec <main+0x2>
+
+00000102 <__vector_13>:
+ 102:	1f 92       	push	r1
+ 104:	0f 92       	push	r0
+ 106:	0f b6       	in	r0, 0x3f	; 63
+ 108:	0f 92       	push	r0
+ 10a:	11 24       	eor	r1, r1
+ 10c:	8f 93       	push	r24
+ 10e:	9f 93       	push	r25
+ 110:	34 9a       	sbi	0x06, 4	; 6
+ 112:	84 b1       	in	r24, 0x04	; 4
+ 114:	95 b1       	in	r25, 0x05	; 5
+ 116:	90 93 61 00 	sts	0x0061, r25
+ 11a:	80 93 60 00 	sts	0x0060, r24
+ 11e:	9f 91       	pop	r25
+ 120:	8f 91       	pop	r24
+ 122:	0f 90       	pop	r0
+ 124:	0f be       	out	0x3f, r0	; 63
+ 126:	0f 90       	pop	r0
+ 128:	1f 90       	pop	r1
+ 12a:	18 95       	reti
+
+0000012c <_exit>:
+ 12c:	f8 94       	cli
+
+0000012e <__stop_program>:
+ 12e:	ff cf       	rjmp	.-2      	; 0x12e <__stop_program>
